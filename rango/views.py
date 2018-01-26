@@ -1,5 +1,6 @@
 from django.http import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import render
+
 from rango.models import Category
 from rango.models import Page
 
@@ -11,7 +12,8 @@ def index(request):
     # that will be passed to the template engine.
 
     category_list = Category.objects.order_by('-likes')[:5]
-    context_dict = {'categories': category_list}
+    page_list = Page.objects.order_by('-views')[:5]
+    context_dict = {'categories': category_list, 'pages': page_list}
 
     # Render the response and send it back!
     return render(request, 'rango/index.html', context_dict)
@@ -50,7 +52,8 @@ def show_category(request, category_name_slug):
         # Don't do anything -
         # the template will display the "no category" message for us.
         context_dict['category'] = None
-        context_dict['pages'] = None
+        context_dict['pages'] = None
+
         
     # Go render the response and return it to the client.
     return render(request, 'rango/category.html', context_dict)
